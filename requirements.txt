@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+faker
+pydantic
+email-validator
+pytest
+httpx
+pytest-html

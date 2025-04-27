@@ -1,0 +1,158 @@
+{
+    "info": {
+      "name": "Products and Messages API Test",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Products 測試",
+        "item": [
+          {
+            "name": "查詢第一頁產品資料",
+            "request": {
+              "method": "GET",
+              "url": "{{baseUrl}}/products?page=1"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 200\", function () {", "    pm.response.to.have.status(200);", "});"]
+              }
+            }]
+          },
+          {
+            "name": "查詢價格範圍產品",
+            "request": {
+              "method": "GET",
+              "url": "{{baseUrl}}/products?between=price,10,50"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 200\", function () {", "    pm.response.to.have.status(200);", "});"]
+              }
+            }]
+          },
+          {
+            "name": "查詢錯誤範圍參數",
+            "request": {
+              "method": "GET",
+              "url": "{{baseUrl}}/products?between=price,abc,50"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 400\", function () {", "    pm.response.to.have.status(400);", "});"]
+              }
+            }]
+          },
+          {
+            "name": "以名稱排序產品",
+            "request": {
+              "method": "GET",
+              "url": "{{baseUrl}}/products?sort=name,asc"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 200\", function () {", "    pm.response.to.have.status(200);", "});"]
+              }
+            }]
+          },
+          {
+            "name": "查詢單一產品成功",
+            "request": {
+              "method": "GET",
+              "url": "{{baseUrl}}/products/1"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 200\", function () {", "    pm.response.to.have.status(200);", "});"]
+              }
+            }]
+          },
+          {
+            "name": "查詢不存在的產品",
+            "request": {
+              "method": "GET",
+              "url": "{{baseUrl}}/products/9999"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 404\", function () {", "    pm.response.to.have.status(404);", "});"]
+              }
+            }]
+          },
+          {
+            "name": "非法字元查詢產品",
+            "request": {
+              "method": "GET",
+              "url": "{{baseUrl}}/products/&"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 400 or 422\", function () {", "    pm.expect(pm.response.code).to.be.oneOf([400, 422]);", "});"]
+              }
+            }]
+          }
+        ]
+      },
+      {
+        "name": "Messages 測試",
+        "item": [
+          {
+            "name": "正常送出訊息",
+            "request": {
+              "method": "POST",
+              "header": [{
+                "key": "Content-Type",
+                "value": "application/json"
+              }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n\t\"name\": \"John Doe\",\n\t\"subject\": \"Order Issue\",\n\t\"message\": \"The product was not as expected.\",\n\t\"email\": \"johndoe@example.com\"\n}"
+              },
+              "url": "{{baseUrl}}/messages"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 200\", function () {", "    pm.response.to.have.status(200);", "});"]
+              }
+            }]
+          },
+          {
+            "name": "送出錯誤email格式",
+            "request": {
+              "method": "POST",
+              "header": [{
+                "key": "Content-Type",
+                "value": "application/json"
+              }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n\t\"name\": \"John Doe\",\n\t\"subject\": \"Order Issue\",\n\t\"message\": \"The product was not as expected.\",\n\t\"email\": \"invalidemail\"\n}"
+              },
+              "url": "{{baseUrl}}/messages"
+            },
+            "event": [{
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test(\"Status code is 422\", function () {", "    pm.response.to.have.status(422);", "});"]
+              }
+            }]
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "baseUrl",
+        "value": "http://localhost:8000"
+      }
+    ]
+  }
+  

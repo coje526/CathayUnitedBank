@@ -1,0 +1,15 @@
+# 使用官方Python
+FROM python:3.11-slim
+
+# 設定工作目錄
+WORKDIR /app
+
+# 安裝套件
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 複製測試檔案
+COPY test_api.py .
+
+# 預設執行pytest產生HTML報告
+CMD ["pytest", "test_api.py", "-v", "--html=report.html", "--self-contained-html"]

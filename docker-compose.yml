@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 100
+
+
+  api-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    networks:
+      - app-net
+    depends_on:
+      backend:
+        condition: service_healthy
+    volumes:
+      - ./reports:/app/reports
+    working_dir: /app
+    entrypoint: ["pytest", "test_api.py", "-v", "--html=reports/report.html", "--self-contained-html"]
+    restart: "no"
+
+networks:
+  app-net:
+    driver: bridge

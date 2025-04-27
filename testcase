@@ -1,0 +1,19 @@
+Module,Function,Test Item,Priority,Pre-condition,Step,Expect Result,Actual Result,Tester,Result
+Products,查詢產品列表,查詢第一頁產品資料,P1,服務正常運行,發送GET請求至 /products?page=1,返回10筆產品資料,Pass,TesterA,Pass
+Products,依價格範圍過濾產品,查詢價格範圍產品,P1,服務正常運行,發送GET請求至 /products?between=price,10,50,只返回價格在10~50之間的產品,Pass,TesterA,Pass
+Products,錯誤價格範圍參數處理,查詢錯誤範圍參數,P2,服務正常運行,發送GET請求至 /products?between=price,abc,50,返回400錯誤,Pass,TesterA,Pass
+Products,依指定欄位排序產品,以名稱排序產品,P2,服務正常運行,發送GET請求至 /products?sort=name,asc,返回按名稱升冪排序的產品,Pass,TesterA,Pass
+Products,查詢單一產品詳情,查詢單一產品成功,P1,服務正常運行,發送GET請求至 /products/1,返回id為1的產品資料,Pass,TesterA,Pass
+Products,查詢不存在的產品處理,查詢不存在的產品,P1,服務正常運行,發送GET請求至 /products/9999,返回404錯誤,Pass,TesterA,Pass
+Products,非法字元查詢產品,P1,服務正常運行,發送GET請求至 /products/&，請求失敗,返回422或400錯誤,Pass,TesterA,Pass
+Products,缺少必要參數page,P2,服務正常運行,發送GET請求至 /products，返回預設第一頁資料,Pass,TesterA,Pass
+Products,查詢page為字串,P2,服務正常運行,發送GET請求至 /products?page=abc,返回422參數錯誤,Pass,TesterA,Pass
+Products,查詢between格式錯誤,P2,服務正常運行,發送GET請求至 /products?between=price10-50,返回400錯誤,Pass,TesterA,Pass
+Products,排序sort格式錯誤,P2,服務正常運行,發送GET請求至 /products?sort=name-asc,返回正常或忽略錯誤,Pass,TesterA,Pass
+Messages,送出訊息表單,正常送出訊息,P1,服務正常運行,發送正確格式的POST請求至/messages,返回訊息成功確認,Pass,TesterA,Pass
+Messages,驗證email格式錯誤處理,送出錯誤email格式,P1,服務正常運行,發送錯誤email的POST至/messages,返回422驗證錯誤,Pass,TesterA,Pass
+Messages,驗證subject與message空值處理,送出空白subject,message,P1,服務正常運行,發送空白subject或message的POST至/messages,返回422驗證錯誤,Pass,TesterA,Pass
+Messages,驗證name欄位非法字元,送出非法name格式,P2,服務正常運行,發送包含特殊字元name的POST至/messages,返回422驗證錯誤,Pass,TesterA,Pass
+Messages,送出缺少email欄位的訊息,P2,服務正常運行,發送少email欄位的POST至/messages,返回422驗證錯誤,Pass,TesterA,Pass
+Messages,送出空白name,P2,服務正常運行,發送空白name的POST至/messages,返回422驗證錯誤,Pass,TesterA,Pass
+Messages,送出極大長度的message,P3,服務正常運行,送出message欄位超過10000字的POST,返回成功或限制錯誤,Pass,TesterA,Pass
